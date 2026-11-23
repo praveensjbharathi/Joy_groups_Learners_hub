@@ -1,0 +1,22 @@
+Joy Groups Learning Hub — self-host export validation
+23 November 2026
+
+PASS: independent Vinext/Cloudflare build without Sites control-plane plugin.
+PASS: TypeScript check.
+PASS: Wrangler deployment dry-run with DB, BUCKET and authentication variables.
+PASS: both D1 migrations applied successfully to a new local database.
+PASS: Access JWT unit tests (signature, issuer, audience, expiry, not-before,
+      required user claims, token type, forged identity headers, cookies,
+      duplicate-cookie rejection and safe relative redirects).
+PASS: academy workflow integration tests using signed synthetic Access JWTs
+      and an in-memory database; no real identity-provider calls.
+PASS: 991 Hub workflow/privacy/role/scoring/version/archive checks.
+PASS: 5,355 language/structure/source/grading checks across 105 lessons in
+      Tamil, Hindi and Arabic; no missing dictionary entries in this audit.
+
+NOT PERFORMED: provisioning resources or deploying to your Cloudflare account,
+real identity-provider login, delivery by email/SMS/WhatsApp, migration of
+existing employee records or documents. These require your configuration.
+
+Archive excludes node_modules, build outputs, local databases, active sessions,
+Git metadata and credentials. Run npm ci, configure resources and follow README.md.

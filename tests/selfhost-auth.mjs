@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {generateKeyPair,exportJWK,createLocalJWKSet,SignJWT} from 'jose';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+const dir=await mkdtemp(path.join(tmpdir(),'joy-auth-'));
+await build({entryPoints:['lib/access-auth.ts'],bundle:true,platform:'node',format:'esm',target:'node22',outfile:path.join(dir,'auth.mjs')});
+const a=await import(pathToFileURL(path.join(dir,'auth.mjs')));
+const {publicKey,privateKey}=await generateKeyPair('RS256'),jwk=await exportJWK(publicKey);jwk.kid='test';
+const keys=createLocalJWKSet({keys:[jwk]}),config={TEAM_DOMAIN:'https://joy-test.cloudflareaccess.com',ACCESS_AUD:'joy-app'};
+async function token(overrides={},options={}){let jwt=new SignJWT({email:'HR@example.test',type:'app',...overrides}).setProtectedHeader({alg:'RS256',kid:'test'}).setIssuer(options.issuer||config.TEAM_DOMAIN).setAudience(options.audience||config.ACCESS_AUD).setSubject('stable-user').setIssuedAt();if(!options.noExp)jwt=jwt.setExpirationTime(options.exp||'5m');if(options.nbf)jwt=jwt.setNotBefore(options.nbf);return jwt.sign(privateKey)}
+const valid=await token();assert.equal((await a.verifyAccessToken(valid,config,keys)).email,'hr@example.test');
+for(const invalid of [await token({}, {issuer:'https://attacker.cloudflareaccess.com'}),await token({}, {audience:'other'}),await token({}, {exp:'-1m'}),await token({}, {noExp:true}),await token({}, {nbf:'5m'}),await token({type:'org'}),await token({email:''}),valid.slice(0,-20)+'x'.repeat(20)])assert.equal(await a.verifyAccessToken(invalid,config,keys),null);
+assert.equal(await a.verifyAccessToken(valid,{},keys),null);assert.equal(a.accessSettings({TEAM_DOMAIN:'https://attacker.invalid',ACCESS_AUD:'joy-app'}),null);
+assert.equal(a.accessToken(new Headers({'oai-authenticated-user-email':'praveen.red.07@gmail.com'})),null);
+assert.equal(a.accessToken(new Headers({cookie:'CF_Authorization='+valid})),valid);
+assert.equal(a.accessToken(new Headers({cookie:'CF_Authorization=a; CF_Authorization=b'})),null);
+assert.equal(a.safeReturn('//attacker.invalid'),'/');assert.equal(a.safeReturn('/\\attacker.invalid'),'/');assert.equal(a.safeReturn('/signin-with-chatgpt'),'/');assert.equal(a.safeReturn('/team?lang=ta'),'/team?lang=ta');
+console.log('PASS: signed identity, issuer/audience/expiry/nbf/required claims, forged identity headers, cookies and safe redirects.');
+await rm(dir,{recursive:true,force:true});

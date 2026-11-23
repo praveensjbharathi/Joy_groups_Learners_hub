@@ -1,0 +1,9 @@
+# Copy to .dev.vars for optional LOCAL auth configuration. Never commit real secrets.
+TEAM_DOMAIN="https://YOUR-TEAM.cloudflareaccess.com"
+ACCESS_AUD="YOUR-APPLICATION-AUDIENCE-TAG"
+INITIAL_ADMIN_EMAIL="praveen.red.07@gmail.com"
+# Optional notification credentials:
+# RESEND_API_KEY=""
+# TWILIO_ACCOUNT_SID=""
+# TWILIO_AUTH_TOKEN=""
+# WHATSAPP_ACCESS_TOKEN=""

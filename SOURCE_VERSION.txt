@@ -1,0 +1,5 @@
+Joy Groups Learning Hub self-hosting export
+Published source: version 10, 23 November 2026
+Commit: 2c2f30c2b243b93e09ae851dfbcb0c1366dada75
+Export-only changes: independent Cloudflare configuration and build commands, verified Access JWT identity, configurable initial administrator, self-hosting instructions/tests, and export-specific database error guidance.
+The ChatGPT-hosted Site is not modified by this export. No live employee database, uploaded documents, provider credentials or active sessions are included.

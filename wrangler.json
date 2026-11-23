@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "joy-groups-learning-hub",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "joy-learning-hub",
+      "database_id": "00000000-0000-4000-8000-000000000000",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "joy-learning-files"
+    }
+  ],
+  "vars": {
+    "TEAM_DOMAIN": "",
+    "ACCESS_AUD": "",
+    "INITIAL_ADMIN_EMAIL": "praveen.red.07@gmail.com"
+  }
+}

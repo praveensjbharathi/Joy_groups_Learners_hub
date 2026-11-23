@@ -1,0 +1,7 @@
+import {modules} from './content';
+import {expandLesson} from './lesson-detail';
+import type {Module} from './types';
+import type {LessonUnit} from './hub-types';
+const track:Record<string,string>={m01:'foundation',m02:'people',m03:'people',m04:'tech',m05:'tech',m06:'tech',m07:'tech',m08:'tech',m09:'jcs',m10:'jms',m11:'jcs',m12:'people'};
+export function deliveryLesson(m:Module):LessonUnit{const u=expandLesson({id:'delivery-'+m.id,track:track[m.id]||'foundation',title:m.title,objective:m.outcome,steps:m.lessons.slice(0,3).map(x=>x.title),normal:m.lessons.flatMap(x=>x.body).find(x=>/^Example:/i.test(x))||m.summary,exception:'A buyer or colleague asks for a commitment beyond the verified scope, current evidence or assigned authority.',escalation:'Record the specific uncertainty and ask the authorised Product, delivery or commercial owner for confirmation before committing.',practice:m.practice,quiz:m.quiz,image:track[m.id]==='jms'?'manpower':m.id==='m07'||m.id==='m08'?'marketing':'software',source:'Joy Groups Product Delivery Training Handbook 2026; commercial/product plans and the academy source register. Draft features and prices still require current approval.',version:2});u.chapters=[...(u.chapters||[]).slice(0,1),...m.lessons.map((l,i)=>({id:'playbook-'+i,title:l.title,paragraphs:l.body})),...(u.chapters||[]).slice(1)];return u;}
+export const deliveryUnits=modules.map(deliveryLesson);

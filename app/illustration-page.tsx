@@ -1,0 +1,5 @@
+'use client';
+import {Localize,LanguageSelector} from './language';
+import {ArrowLeft,ArrowUpRight} from 'lucide-react';
+import './lesson-page.css';
+export default function IllustrationPage({item}:{item:{image:string;title:string;detail:string;lesson:string}|null}){return <Localize><main className="lp lp-image-page"><header><LanguageSelector/><a href="/">Joy Groups Learning Hub</a><button onClick={()=>window.history.back()}><ArrowLeft size={16}/>Back</button></header>{item?<><p className="lp-eyebrow">COMPLETE IMAGE · UNCROPPED</p><h1>{item.title}</h1><p>{item.detail}</p><img src={'/learning/'+item.image+'.jpg?v=20261117'} alt={item.title} onError={e=>{if(e.currentTarget.src.includes('.jpg'))e.currentTarget.src='/learning/'+item.image+'.webp'}}/><p>AI-generated teaching illustration · fictional example.</p><a href={'/learn/'+item.lesson}>Open the detailed lesson <ArrowUpRight size={15}/></a></>:<><h1>Illustration unavailable</h1><a href="/">Return to the Learning Hub</a></>}</main></Localize>}
